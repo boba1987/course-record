@@ -1,0 +1,6 @@
+course-record-frontend
+**/node_modules
+**/.next
+**/.git
+**/.DS_Store
+**/target
