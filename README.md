@@ -88,11 +88,15 @@ Details: [course-record-frontend README](https://github.com/boba1987/course-reco
 | **`make init`** | Initialize and sync submodules to the commits pinned by this repo |
 | **`make update`** | Fetch remotes and update each submodule to the latest **`main`** |
 | **`make dev`** | Build and start MySQL + API in Docker, wait until the OpenAPI URL responds, then start Next.js (`npm run dev`). **Ctrl+C** stops only the frontend; run **`make docker-down`** to stop containers |
+| **`make prod`** | Same as **`make dev`**, then production **`next build`** (`NODE_ENV=production`) and **`next start`** on port **3000** |
 | **`make dev-local`** | Run the backend with Maven and the frontend with npm in parallel (requires local MySQL and `course-record-backend` config as in the backend README) |
 | **`make docker-up`** / **`make docker-down`** | Start or stop the Compose stack |
 | **`make wait-backend`** | Block until `BACKEND_READY_URL` returns HTTP 200 (default: OpenAPI JSON) |
 | **`make backend`** | `mvn spring-boot:run` inside the backend submodule |
 | **`make frontend`** | `npm run dev` inside the frontend submodule (runs **`npm ci`** when `node_modules` is missing) |
+| **`make frontend-build`** | Production **`next build`** in the frontend submodule |
+| **`make frontend-start`** | **`next start`** (run **`make frontend-build`** first) |
+| **`make install-frontend`** | **`npm ci`** in the frontend submodule |
 
 Override the readiness check if needed:
 

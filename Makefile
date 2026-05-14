@@ -8,8 +8,8 @@ COMPOSE      := docker compose
 # Public OpenAPI JSON (no auth); used to detect when the app is accepting HTTP.
 BACKEND_READY_URL ?= http://127.0.0.1:8080/course-record/v3/api-docs
 
-.PHONY: help init update dev dev-local docker-up docker-down wait-backend \
-	backend frontend install-frontend
+.PHONY: help init update dev dev-local prod docker-up docker-down wait-backend \
+	backend frontend frontend-build frontend-start install-frontend
 
 help:
 	@echo "Targets:"
@@ -17,12 +17,15 @@ help:
 	@echo "  make update            fetch each submodule and move it to latest origin/main"
 	@echo "  make dev               Docker MySQL + backend, wait for API, then Next.js (foreground)"
 	@echo "                         Ctrl+C stops Next.js only; run: make docker-down"
+	@echo "  make prod              same as dev but NODE_ENV=production build then next start (port 3000)"
 	@echo "  make dev-local         Local mvn + Next.js in parallel (needs local MySQL + config)"
 	@echo "  make docker-up         docker compose up -d --build (requires .env from .env.example)"
 	@echo "  make docker-down       docker compose down"
 	@echo "  make wait-backend      HTTP wait until $(BACKEND_READY_URL) responds"
 	@echo "  make backend           mvn spring-boot:run in $(SUB_BACKEND)"
 	@echo "  make frontend          npm run dev in $(SUB_FRONTEND)"
+	@echo "  make frontend-build    next build (production) in $(SUB_FRONTEND)"
+	@echo "  make frontend-start    next start (requires make frontend-build first)"
 	@echo "  make install-frontend  npm ci in $(SUB_FRONTEND)"
 
 init:
@@ -67,6 +70,14 @@ dev: init $(SUB_FRONTEND)/node_modules
 	@echo "Next.js starting. Containers keep running after Ctrl+C — use: make docker-down"
 	cd $(SUB_FRONTEND) && npm run dev
 
+prod: init $(SUB_FRONTEND)/node_modules
+	test -f $(SUB_FRONTEND)/package-lock.json || (echo "error: $(SUB_FRONTEND) missing — run make init" >&2; exit 1)
+	$(MAKE) docker-up
+	$(MAKE) wait-backend
+	$(MAKE) frontend-build
+	@echo "Next.js production server (next start). Containers keep running after Ctrl+C — use: make docker-down"
+	cd $(SUB_FRONTEND) && npm run start
+
 dev-local:
 	$(MAKE) init
 	test -f $(SUB_FRONTEND)/package-lock.json || (echo "error: $(SUB_FRONTEND) missing — run make init" >&2; exit 1)
@@ -78,3 +89,10 @@ backend:
 
 frontend: $(SUB_FRONTEND)/node_modules
 	cd $(SUB_FRONTEND) && npm run dev
+
+frontend-build: $(SUB_FRONTEND)/node_modules
+	cd $(SUB_FRONTEND) && NODE_ENV=production npm run build
+
+frontend-start: $(SUB_FRONTEND)/node_modules
+	test -f $(SUB_FRONTEND)/.next/BUILD_ID || { echo "error: no production build — run: make frontend-build" >&2; exit 1; }
+	cd $(SUB_FRONTEND) && npm run start
