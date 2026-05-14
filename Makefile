@@ -8,12 +8,13 @@ COMPOSE      := docker compose
 # Public OpenAPI JSON (no auth); used to detect when the app is accepting HTTP.
 BACKEND_READY_URL ?= http://127.0.0.1:8080/course-record/v3/api-docs
 
-.PHONY: help init dev dev-local docker-up docker-down wait-backend \
+.PHONY: help init update dev dev-local docker-up docker-down wait-backend \
 	backend frontend install-frontend
 
 help:
 	@echo "Targets:"
 	@echo "  make init              git submodule update --init --recursive"
+	@echo "  make update            fetch each submodule and move it to latest origin/main"
 	@echo "  make dev               Docker MySQL + backend, wait for API, then Next.js (foreground)"
 	@echo "                         Ctrl+C stops Next.js only; run: make docker-down"
 	@echo "  make dev-local         Local mvn + Next.js in parallel (needs local MySQL + config)"
@@ -26,6 +27,10 @@ help:
 
 init:
 	git submodule update --init --recursive
+
+update:
+	git submodule update --init --recursive
+	git submodule update --remote --merge
 
 install-frontend:
 	cd $(SUB_FRONTEND) && npm ci

@@ -1,6 +1,8 @@
 [submodule "course-record-backend"]
 	path = course-record-backend
 	url = https://github.com/boba1987/course-record-backend.git
+	branch = main
 [submodule "course-record-frontend"]
 	path = course-record-frontend
 	url = https://github.com/boba1987/course-record-frontend.git
+	branch = main
