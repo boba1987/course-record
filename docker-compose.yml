@@ -7,12 +7,12 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: course_record
-      MYSQL_USER: course_record
-      MYSQL_PASSWORD: course_record_dev
-      MYSQL_ROOT_PASSWORD: root_course_record_dev
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-course_record}
+      MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env (see .env.example)}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env (see .env.example)}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env (see .env.example)}
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot_course_record_dev"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
       interval: 5s
       timeout: 5s
       retries: 30
@@ -27,11 +27,11 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/course_record?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: course_record
-      SPRING_DATASOURCE_PASSWORD: course_record_dev
-      JWT_SECRET: dev-docker-only-change-me-use-32bytes-minimum-secret-key
-      APP_ADMIN_USERNAME: admin
-      APP_ADMIN_PASSWORD: admin
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-course_record}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:?Set MYSQL_USER in .env (see .env.example)}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env (see .env.example)}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env (see .env.example)}
+      APP_ADMIN_USERNAME: ${APP_ADMIN_USERNAME:-admin}
+      APP_ADMIN_PASSWORD: ${APP_ADMIN_PASSWORD:?Set APP_ADMIN_PASSWORD in .env (see .env.example)}
     ports:
       - "8080:8080"

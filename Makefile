@@ -18,7 +18,7 @@ help:
 	@echo "  make dev               Docker MySQL + backend, wait for API, then Next.js (foreground)"
 	@echo "                         Ctrl+C stops Next.js only; run: make docker-down"
 	@echo "  make dev-local         Local mvn + Next.js in parallel (needs local MySQL + config)"
-	@echo "  make docker-up         docker compose up -d --build"
+	@echo "  make docker-up         docker compose up -d --build (requires .env from .env.example)"
 	@echo "  make docker-down       docker compose down"
 	@echo "  make wait-backend      HTTP wait until $(BACKEND_READY_URL) responds"
 	@echo "  make backend           mvn spring-boot:run in $(SUB_BACKEND)"
@@ -39,6 +39,7 @@ $(SUB_FRONTEND)/node_modules: $(SUB_FRONTEND)/package-lock.json
 	cd $(SUB_FRONTEND) && npm ci
 
 docker-up:
+	@test -f .env || { echo "error: missing .env — copy .env.example to .env and set secrets" >&2; exit 1; }
 	$(COMPOSE) up -d --build
 
 docker-down:

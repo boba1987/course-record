@@ -36,6 +36,18 @@ Same as **`make init`**.
 
 ---
 
+## Docker environment (`.env`)
+
+Secrets and passwords for Compose are **not** stored in `docker-compose.yml`. Copy the template once:
+
+```bash
+cp .env.example .env
+```
+
+Edit **`.env`** with your own values (never commit `.env`). `docker compose` loads it for variable substitution when you run **`make docker-up`** or **`make dev`**. The Makefile refuses to start Compose if `.env` is missing.
+
+---
+
 ## Submodules and “latest”
 
 The parent repo **records a specific commit** for each submodule. Cloning or running **`make init`** checks out those commits; it does **not** automatically follow new commits on GitHub.
@@ -92,8 +104,8 @@ make dev BACKEND_READY_URL=http://127.0.0.1:8080/course-record/v3/api-docs
 
 ## Docker notes
 
-- Compose file: **`docker-compose.yml`**. MySQL data persists in the **`mysql_data`** volume until you remove it (for example `docker compose down -v`).
-- Default dev credentials and JDBC settings are embedded in Compose for local use only. **Change them** before any real deployment.
+- Compose file: **`docker-compose.yml`**. Credentials and JWT/admin secrets come from **`.env`** (see **`.env.example`**).
+- MySQL data persists in the **`mysql_data`** volume until you remove it (for example `docker compose down -v`).
 - The MySQL service is **not** published on the host port `3306`; only the backend container connects to it on the Compose network.
 
 ---
@@ -104,6 +116,7 @@ make dev BACKEND_READY_URL=http://127.0.0.1:8080/course-record/v3/api-docs
 course-record/
 ├── Makefile
 ├── docker-compose.yml
+├── .env.example
 ├── docker/backend/Dockerfile
 ├── .dockerignore
 ├── .gitmodules
