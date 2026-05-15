@@ -1,4 +1,4 @@
-# Course Record (parent repo)
+# Course Record (Karton predmeta) (parent repo)
 
 This repository groups the **Course Record** admin stack as [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules): a Spring Boot API and a Next.js admin UI. It adds **Docker Compose** (MySQL + API) and a **Makefile** so you can run the full dev loop from one folder.
 
