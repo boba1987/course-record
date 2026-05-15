@@ -10,9 +10,10 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-course_record}
       MYSQL_USER: ${MYSQL_USER:?Set MYSQL_USER in .env (see .env.example)}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env (see .env.example)}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env (see .env.example)}
+      # Root password is random and only in container logs — app uses MYSQL_USER only.
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD || exit 1"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD || exit 1"]
       interval: 5s
       timeout: 5s
       retries: 30
