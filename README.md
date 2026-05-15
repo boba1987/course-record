@@ -22,7 +22,7 @@ This repository groups the **Course Record** admin stack as [Git submodules](htt
 ## Clone
 
 ```bash
-git clone --recurse-submodules <URL-of-this-repo>.git
+git clone --recurse-submodules git@github.com:boba1987/course-record.git
 cd course-record
 ```
 
