@@ -26,7 +26,7 @@ git clone --recurse-submodules git@github.com:boba1987/course-record.git
 cd course-record
 ```
 
-If you already cloned without submodules:
+If you cloned without submodules:
 
 ```bash
 git submodule update --init --recursive
