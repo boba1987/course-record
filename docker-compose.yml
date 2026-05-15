@@ -21,8 +21,8 @@ services:
 
   backend:
     build:
-      context: .
-      dockerfile: docker/backend/Dockerfile
+      context: ./course-record-backend
+      dockerfile: Dockerfile
     depends_on:
       mysql:
         condition: service_healthy

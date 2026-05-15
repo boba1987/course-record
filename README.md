@@ -121,10 +121,9 @@ course-record/
 ├── Makefile
 ├── docker-compose.yml
 ├── .env.example
-├── docker/backend/Dockerfile
 ├── .dockerignore
 ├── .gitmodules
-├── course-record-backend/    # submodule
+├── course-record-backend/    # submodule (includes Dockerfile)
 └── course-record-frontend/   # submodule
 ```
 
