@@ -14,7 +14,7 @@ This repository groups the **Course Record** admin stack as [Git submodules](htt
 - **Git** with submodule support  
 - **Docker** and **Docker Compose** v2 (`docker compose`)  
 - **GNU Make**, **curl**  
-- **Node.js** and **npm** (frontend runs on the host)  
+- **Node.js** and **npm**
 - **JDK 17** and **Maven** only if you use `make dev-local` / `make backend` instead of Docker  
 
 ---
